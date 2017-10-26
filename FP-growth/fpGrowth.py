@@ -87,22 +87,23 @@ def createInitSet(dataSet):
 	
 	return retDict
 
-def ascendTree(leafTree, prefixPath):
+def ascendTree(leafNode, prefixPath):
 	if leafNode.parent != None:
-		prefixPath.append(leafNode.parent, prefixPath)
+		prefixPath.append(leafNode.name)
+		ascendTree(leafNode.parent, prefixPath)
 
 def findPrefixPath(basePat, treeNode):
 	condPats = {}
 	while(treeNode != None):
 		prefixPath = []
-		ascentdTree(treeNode, prefixPath)
+		ascendTree(treeNode, prefixPath)
 		if len(prefixPath) > 1:
-			condPats[frozenset(prefixPath[1, :])] = treeNode.count
+			condPats[frozenset(prefixPath[1 :])] = treeNode.count
 		treeNode = treeNode.nodeLink
 
 	return condPats
 
-def mineTree(inTree, headearTable, minSup, prefix, freqItemList):
+def mineTree(inTree, headerTable, minSup, preFix, freqItemList):
 	bigL = [v[0] for v in sorted(headerTable.items(), key = lambda p : p[1])]
 
 	for basePat in bigL:
@@ -113,6 +114,8 @@ def mineTree(inTree, headearTable, minSup, prefix, freqItemList):
 		myCondTree, myHead = createTree(condPattBases, minSup)
 
 		if(myHead != None):
+			print 'conditional tree for : ', newFreqSet
+			myCondTree.disp(1)
 			mineTree(myCondTree, myHead, minSup, newFreqSet, freqItemList)
 
 
